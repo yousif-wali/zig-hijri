@@ -1,5 +1,5 @@
 const std = @import("std");
-
+const mytime = @import("time");
 pub const HijriDate = struct {
     year: i32,
     month: i32,
@@ -10,10 +10,13 @@ fn gregorianToJDN(year: i32, month: i32, day: i32) i64 {
     const a = @divFloor(14 - month, 12);
     const y = year + 4800 - a;
     const m = month + 12 * a - 3;
-
+    var totalDayInYear = 365;
+    if(mytime.epoch.isLeapYear(mytime.epoch.Year)){
+        totalDayInYear = 366;
+    }
     return @as(i64, day)
         + @divFloor((153 * m + 2), 5)
-        + 365 * y
+        + totalDayInYear * y
         + @divFloor(y, 4)
         - @divFloor(y, 100)
         + @divFloor(y, 400)
